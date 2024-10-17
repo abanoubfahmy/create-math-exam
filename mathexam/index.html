@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الرياضيات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .question {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input[type="text"], input[type="radio"] {
+            margin: 5px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>اختبار الرياضيات</h1>
+    <div id="quiz"></div>
+    <button onclick="checkAnswers()">إنهاء الاختبار</button>
+    <div id="result"></div>
+
+    <script>
+        const quiz = [
+            {type: 'multiple', question: '5 + 3 = ?', options: ['7', '8', '9', '10'], answer: '8'},
+            {type: 'multiple', question: '12 - 4 = ?', options: ['6', '7', '8', '9'], answer: '8'},
+            {type: 'multiple', question: '3 × 6 = ?', options: ['15', '16', '17', '18'], answer: '18'},
+            {type: 'multiple', question: '20 ÷ 4 = ?', options: ['4', '5', '6', '7'], answer: '5'},
+            {type: 'multiple', question: '2² = ?', options: ['2', '3', '4', '5'], answer: '4'},
+            {type: 'fill', question: '7 + ___ = 15', answer: '8'},
+            {type: 'fill', question: '20 - ___ = 12', answer: '8'},
+            {type: 'fill', question: '4 × ___ = 24', answer: '6'},
+            {type: 'fill', question: '18 ÷ ___ = 3', answer: '6'},
+            {type: 'fill', question: '3² + ___ = 11', answer: '2'}
+        ];
+
+        function displayQuiz() {
+            const quizDiv = document.getElementById('quiz');
+            quiz.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
+                
+                if (q.type === 'multiple') {
+                    q.options.forEach((option, optionIndex) => {
+                        questionDiv.innerHTML += `
+                            <input type="radio" id="q${index}o${optionIndex}" name="q${index}" value="${option}">
+                            <label for="q${index}o${optionIndex}">${option}</label><br>
+                        `;
+                    });
+                } else {
+                    questionDiv.innerHTML += `<input type="text" id="q${index}">`;
+                }
+                
+                quizDiv.appendChild(questionDiv);
+            });
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            quiz.forEach((q, index) => {
+                if (q.type === 'multiple') {
+                    const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        score++;
+                    }
+                } else {
+                    const answer = document.getElementById(`q${index}`).value;
+                    if (answer === q.answer) {
+                        score++;
+                    }
+                }
+            });
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = `النتيجة: ${score} من ${quiz.length}`;
+        }
+
+        displayQuiz();
+    </script>
+</body>
+</html>
